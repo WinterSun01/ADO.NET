@@ -17,9 +17,10 @@ namespace Academy
             InitializeComponent();
             dataGridViewStudents.Rows.CollectionChanged += new CollectionChangeEventHandler(CountRows);
             dataGridViewStudents.DataSource =
-                Connector.Select("last_name, first_name, middle_name, birth_date, group_name, direction_name", 
-                "Students, Groups, Directions",
-                "[group] = group_id AND direction = direction_id");
+                Connector.Select("last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
+                                "DATEDIFF(YEAR, birth_date, GETDATE()) AS age", //добавление возраста студентов
+                                "Students, Groups, Directions",
+                                "[group] = group_id AND direction = direction_id");
             
         }
         void CountRows(object sender, EventArgs e)
@@ -27,14 +28,5 @@ namespace Academy
             toolStripStatusLabelStudentsCount.Text = $"Количество студентов: {dataGridViewStudents.RowCount}.";
         }
 
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }
