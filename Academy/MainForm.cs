@@ -33,7 +33,7 @@ namespace Academy
             comboBoxStudentsDirection.DisplayMember = "direction_name";
             comboBoxStudentsDirection.SelectedIndex = -1;
 
-            //для автом. примен. фильтр. при каждом измен. выбр. элемента в выпад. списках
+            //для автопримен. изменений при каждом измен. выбр. элемента в выпад. списках
             comboBoxStudentsGroup.SelectedIndexChanged += ApplyFilters;
             comboBoxStudentsDirection.SelectedIndexChanged += ApplyFilters;
 
