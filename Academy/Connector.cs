@@ -44,8 +44,20 @@ namespace Academy
             connection.Close();
             return table;
         }
+
+        //для выборки групп и направлений
+        public static DataTable GetDistinctValues(string column, string table)
+        {
+            DataTable tableResult = new DataTable();
+            string cmd = $"SELECT DISTINCT {column} FROM {table}";
+            SqlCommand command = new SqlCommand(cmd, connection);
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            tableResult.Load(reader);
+            connection.Close();
+            return tableResult;
+        }
     }
-
-
-
 }
+
+
