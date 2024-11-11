@@ -44,7 +44,7 @@ namespace Academy
             toolStripStatusLabelStudentsCount.Text = $"Количество студентов: {dataGridViewStudents.RowCount}.";
         }
 
-        //метод для фильтрации данных
+        //для перезагр. данных о студентах с учётом выбр. фильтров, нужен чтобы отобр. только тех, кто соотв. условиям
         private void ApplyFilters(object sender, EventArgs e)
         {
             LoadStudentData();
