@@ -91,6 +91,7 @@
             // 
             // labelStudentsDirection
             // 
+            this.labelStudentsDirection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelStudentsDirection.AutoSize = true;
             this.labelStudentsDirection.Location = new System.Drawing.Point(522, 10);
             this.labelStudentsDirection.Name = "labelStudentsDirection";
@@ -100,6 +101,7 @@
             // 
             // labelStudentsGroup
             // 
+            this.labelStudentsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelStudentsGroup.AutoSize = true;
             this.labelStudentsGroup.Location = new System.Drawing.Point(234, 14);
             this.labelStudentsGroup.Name = "labelStudentsGroup";
@@ -131,6 +133,7 @@
             this.textBoxSearchStudent.Name = "textBoxSearchStudent";
             this.textBoxSearchStudent.Size = new System.Drawing.Size(144, 22);
             this.textBoxSearchStudent.TabIndex = 2;
+            this.textBoxSearchStudent.TextChanged += new System.EventHandler(this.textBoxSearchStudent_TextChanged);
             // 
             // toolStripStatusLabelStudentsCount
             // 
@@ -168,7 +171,7 @@
             this.tabPageGroups.Location = new System.Drawing.Point(4, 25);
             this.tabPageGroups.Name = "tabPageGroups";
             this.tabPageGroups.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGroups.Size = new System.Drawing.Size(792, 417);
+            this.tabPageGroups.Size = new System.Drawing.Size(838, 479);
             this.tabPageGroups.TabIndex = 1;
             this.tabPageGroups.Text = "Groups";
             this.tabPageGroups.UseVisualStyleBackColor = true;
@@ -178,7 +181,7 @@
             this.tabPageDisciplines.Location = new System.Drawing.Point(4, 25);
             this.tabPageDisciplines.Name = "tabPageDisciplines";
             this.tabPageDisciplines.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageDisciplines.Size = new System.Drawing.Size(792, 417);
+            this.tabPageDisciplines.Size = new System.Drawing.Size(838, 479);
             this.tabPageDisciplines.TabIndex = 2;
             this.tabPageDisciplines.Text = "Disciplines";
             this.tabPageDisciplines.UseVisualStyleBackColor = true;
@@ -187,7 +190,7 @@
             // 
             this.tabPageTeachers.Location = new System.Drawing.Point(4, 25);
             this.tabPageTeachers.Name = "tabPageTeachers";
-            this.tabPageTeachers.Size = new System.Drawing.Size(792, 417);
+            this.tabPageTeachers.Size = new System.Drawing.Size(838, 479);
             this.tabPageTeachers.TabIndex = 3;
             this.tabPageTeachers.Text = "Teachers";
             this.tabPageTeachers.UseVisualStyleBackColor = true;
