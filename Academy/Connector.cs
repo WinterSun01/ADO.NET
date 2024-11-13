@@ -11,7 +11,7 @@ using System.Configuration;
 
 namespace Academy
 {
-    internal class Connector
+    class Connector
     {
         static readonly string connectionString = ConfigurationManager.ConnectionStrings["Academy_PD_311"].ConnectionString;
         static SqlConnection connection;
@@ -30,7 +30,7 @@ namespace Academy
             SqlDataReader reader = command.ExecuteReader();
             if (reader.HasRows)
             {
-                for (int i = 0; i<reader.FieldCount; i++)
+                for (int i = 0; i < reader.FieldCount; i++)
                     table.Columns.Add(reader.GetName(i));
                 while (reader.Read())
                 {
@@ -44,20 +44,5 @@ namespace Academy
             connection.Close();
             return table;
         }
-
-        //для выборки групп и направлений
-        public static DataTable GetDistinctValues(string column, string table)
-        {
-            DataTable tableResult = new DataTable();
-            string cmd = $"SELECT DISTINCT {column} FROM {table}";
-            SqlCommand command = new SqlCommand(cmd, connection);
-            connection.Open();
-            SqlDataReader reader = command.ExecuteReader();
-            tableResult.Load(reader);
-            connection.Close();
-            return tableResult;
-        }
     }
 }
-
-
