@@ -16,13 +16,9 @@ namespace Academy
         public MainForm()
         {
             InitializeComponent();
+            LoadStudents();
+            LoadGroups();
 
-            dataGridViewStudents.Rows.CollectionChanged += new CollectionChangeEventHandler(CountRows);
-            dataGridViewStudents.DataSource =
-                Connector.Select("last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
-                                "DATEDIFF(YEAR, birth_date, GETDATE()) AS age", //добавление возраста студентов
-                                "Students, Groups, Directions",
-                                "[group] = group_id AND direction = direction_id");
 
             //заполн. комбобокс группами
             comboBoxStudentsGroup.DataSource = Connector.GetDistinctValues("group_name", "Groups");
@@ -40,9 +36,30 @@ namespace Academy
 
             LoadStudentData();
         }
-        void CountRows(object sender, EventArgs e)
+
+        void LoadStudents()
         {
-            toolStripStatusLabelStudentsCount.Text = $"Количество студентов: {dataGridViewStudents.RowCount}.";
+            dataGridViewStudents.Rows.CollectionChanged += new CollectionChangeEventHandler(SetStatusBarText);
+            dataGridViewStudents.DataSource =
+                Connector.Select("last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
+                                "DATEDIFF(YEAR, birth_date, GETDATE()) AS age", //добавление возраста студентов
+                                "Students, Groups, Directions",
+                                "[group] = group_id AND direction = direction_id");
+        }
+        void LoadGroups()
+        {
+            dataGridViewGroups.Rows.CollectionChanged += new CollectionChangeEventHandler(SetStatusBarText);
+            dataGridViewGroups.DataSource =
+                Connector.Select
+                (
+                    "group_name, direction_name",
+                    "Groups, Directions",
+                    "direction=direction_id"
+                );
+        }
+        void SetStatusBarText(object sender, EventArgs e)
+        {
+            toolStripStatusLabelStudentsCount.Text = $"Number of {(tabControlMain.SelectedTab.Text.ToLower())} : {(sender as DataGridViewRowCollection).Count}.";
         }
 
         //для перезагр. данных о студентах с учётом выбр. фильтров, нужен чтобы отобр. только тех, кто соотв. условиям
@@ -105,6 +122,20 @@ namespace Academy
                "Students, Directions, Groups",
                $"[group]=group_id AND direction=direction_id AND {searchPattern}"
             );
+        }
+
+        private void toolStripLabelCount_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        { 
+            switch ((sender as TabControl).SelectedTab.Text)
+            {
+                case "Students": SetStatusBarText(dataGridViewStudents.Rows, e); break;
+                case "Groups": SetStatusBarText(dataGridViewGroups.Rows, e); break;
+            }
         }
     }
 }
