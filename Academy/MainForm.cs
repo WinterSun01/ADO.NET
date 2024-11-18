@@ -7,52 +7,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Markup;
+using System.Runtime.InteropServices;
 
 namespace Academy
 {
     public partial class MainForm : Form
     {
+        AddGroupForm addGroup;
         public MainForm()
         {
             InitializeComponent();
             LoadStudents();
             LoadGroups();
+            addGroup = new AddGroupForm();
+            AllocConsole();
         }
-
         void LoadStudents()
         {
             dataGridViewStudents.Rows.CollectionChanged += new CollectionChangeEventHandler(SetStatusBarText);
             dataGridViewStudents.DataSource =
-                Connector.Select("last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
+                Connector.Select
+                (
+                    "last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
                                 "DATEDIFF(YEAR, birth_date, GETDATE()) AS age", //добавление возраста студентов
                                 "Students, Groups, Directions",
-                                "[group] = group_id AND direction = direction_id");
-
-            SetStatusBarText(dataGridViewStudents.Rows, EventArgs.Empty);
+                                "[group] = group_id AND direction = direction_id"
+                );
         }
         void LoadGroups()
         {
             dataGridViewGroups.Rows.CollectionChanged += new CollectionChangeEventHandler(SetStatusBarText);
             dataGridViewGroups.DataSource =
-                Connector.Select(
+                Connector.Select
+                (
                     "group_name, COUNT(student_id) AS 'Количество студентов', direction_name",
                     "Groups, Directions, Students",
-                    "direction=direction_id AND [group]=group_id GROUP BY [group_name], direction_name");
-
-            comboBoxGroupDirection.Items.AddRange
-                (
-                Connector.Select("direction_name", "Directions")
-                .AsEnumerable()
-                .Select(row => row["direction_name"].ToString())
-                .ToArray()
+                    "direction=direction_id AND [group]=group_id GROUP BY [group_name], direction_name"
                 );
+
+            //comboBoxGroupDirection.Items.AddRange(Connector.Select("direction_name", "Directions").Rows.Cast<String>().ToArray());
+            comboBoxGroupDirection.Items.AddRange(Connector.SelectColumn("direction_name", "Directions").ToArray());
         }
         void SetStatusBarText(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = $"Количество студентов: {dataGridViewStudents.Rows.Count}";
+            toolStripStatusLabelStudentsCount.Text = $"Number of {tabControlMain.SelectedTab.Text.ToLower()}: {(sender as DataGridViewRowCollection).Count - 1}.";
             //toolStripStatusLabelStudentsCount.Text = $"Number of {tabControlMain.SelectedTab.Text.ToLower()}: {dataGridViewStudents.RowCount}.";
         }
+
         private void textBoxSearchStudent_TextChanged(object sender, EventArgs e)
         {
             string[] values = (sender as TextBox).Text.Split(' ');
@@ -85,8 +86,19 @@ namespace Academy
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            LoadStudents();
-            SetStatusBarText(dataGridViewStudents.Rows, EventArgs.Empty);
+            SetStatusBarText(dataGridViewStudents.Rows, e);
         }
+
+        private void buttonAddGroup_Click(object sender, EventArgs e)
+        {
+            //AddGroupForm addGroup = new AddGroupForm();
+            if (addGroup.ShowDialog() == DialogResult.OK)
+            {
+
+            }
+        }
+
+        [DllImport("kernel32")]
+        static extern bool AllocConsole();
     }
 }
