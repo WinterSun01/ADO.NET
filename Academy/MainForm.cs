@@ -130,20 +130,40 @@ namespace Academy
         [DllImport("kernel32")]
         static extern bool AllocConsole();
 
-        private void dataGridViewGroups_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewGroups_RowHeaderMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             Group group = new Group((sender as DataGridView).SelectedRows[0]);
-            //group.ID = Convert.ToInt32((sender as DataGridView).SelectedRows[0].Cells[0].Value);
-            //group.GroupName = (sender as DataGridView).SelectedRows[0].Cells[1].Value.ToString();
-            //group.StartDate = Convert.ToDateTime((sender as DataGridView).SelectedRows[0].Cells[2].Value);
-            //group.LearningTime = Convert.ToDateTime((sender as DataGridView).SelectedRows[0].Cells[3].Value).TimeOfDay;
-            //group.Direction = Connector.Directions[(sender as DataGridView).SelectedRows[0].Cells[4].Value.ToString()];
-            //group.LearningForm = Connector.LearningForms[(sender as DataGridView).SelectedRows[0].Cells[5].Value.ToString()];
-            //group.LearningDays = Convert.ToByte((sender as DataGridView).SelectedRows[0].Cells[6].Value);
-
             addGroup.Init(group);
+            if (addGroup.ShowDialog() == DialogResult.OK)
+            {
+                int index = dataGridViewGroups.SelectedRows[0].Index;
+                //dataGridViewGroups.Rows.RemoveAt(index);
+                //dataGridViewGroups.Rows.Insert(index, )
+                //Connector.UpdateGroup(group);
+                //dataGridViewGroups.Rows[index] = Connector.UpdateGroup(group);
 
-            addGroup.ShowDialog();
+
+                //TODO:Update DataGridViewRow
+                Connector.UpdateGroup(group);
+                //DataTable table = Connector.UpdateGroup(group);
+                //dataGridViewGroups.Rows[index].SetValues(new object[] { })
+            }
         }
+
+        //private void dataGridViewGroups_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        //{
+        //    Group group = new Group((sender as DataGridView).SelectedRows[0]);
+        //    //group.ID = Convert.ToInt32((sender as DataGridView).SelectedRows[0].Cells[0].Value);
+        //    //group.GroupName = (sender as DataGridView).SelectedRows[0].Cells[1].Value.ToString();
+        //    //group.StartDate = Convert.ToDateTime((sender as DataGridView).SelectedRows[0].Cells[2].Value);
+        //    //group.LearningTime = Convert.ToDateTime((sender as DataGridView).SelectedRows[0].Cells[3].Value).TimeOfDay;
+        //    //group.Direction = Connector.Directions[(sender as DataGridView).SelectedRows[0].Cells[4].Value.ToString()];
+        //    //group.LearningForm = Connector.LearningForms[(sender as DataGridView).SelectedRows[0].Cells[5].Value.ToString()];
+        //    //group.LearningDays = Convert.ToByte((sender as DataGridView).SelectedRows[0].Cells[6].Value);
+
+        //    addGroup.Init(group);
+
+        //    addGroup.ShowDialog();
+        //}
     }
 }
