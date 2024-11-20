@@ -28,21 +28,26 @@ namespace Academy
             dataGridViewStudents.DataSource =
                 Connector.Select
                 (
-                    "last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
-                                "DATEDIFF(YEAR, birth_date, GETDATE()) AS age", //добавление возраста студентов
-                                "Students, Groups, Directions",
-                                "[group] = group_id AND direction = direction_id"
+                "last_name, first_name, middle_name, birth_date, group_name, direction_name, " +
+                "DATEDIFF(YEAR, birth_date, GETDATE()) AS age", //добавление возраста студентов
+                "Students, Groups, Directions",
+                "[group] = group_id AND direction = direction_id"
                 );
         }
         void LoadGroups()
         {
             dataGridViewGroups.Rows.CollectionChanged += new CollectionChangeEventHandler(SetStatusBarText);
             dataGridViewGroups.DataSource =
-                Connector.Select
-                (
-                    "group_name, COUNT(student_id) AS 'Количество студентов', direction_name",
-                    "Groups, Directions, Students",
-                    "direction=direction_id AND [group]=group_id GROUP BY [group_name], direction_name"
+            //Connector.Select(
+            //	"group_name, COUNT(student_id) AS 'Количество студентов', direction_name",
+            //	"Groups, Directions, Students",
+            //	"direction=direction_id AND [group]=group_id GROUP BY [group_name], direction_name");
+
+            Connector.Select
+            (
+                "group_id, group_name,start_date,learning_time,direction_name,form_name,learning_days",
+                "Groups,Directions,LearningForms",
+                "direction=direction_id AND learning_form=form_id"
                 );
 
             //comboBoxGroupDirection.Items.AddRange(Connector.Select("direction_name", "Directions").Rows.Cast<String>().ToArray());
@@ -91,14 +96,40 @@ namespace Academy
 
         private void buttonAddGroup_Click(object sender, EventArgs e)
         {
+            addGroup.ClearData();
             //AddGroupForm addGroup = new AddGroupForm();
             if (addGroup.ShowDialog() == DialogResult.OK)
             {
-
+                //LoadGroups();
+                Group group = new Group(addGroup);
+                //group.GroupName = addGroup.textBoxGroupName.Text;
+                //group.StartDate = addGroup.dateTimePickerGroupStart.Value;
+                //group.LearningTime = addGroup.dateTimePickerGroupTime.Value.TimeOfDay;
+                //group.Direction = addGroup.comboBoxGroupDirection.SelectedIndex + 1;
+                //group.LearningForm = addGroup.comboBoxLearningForm.SelectedIndex + 1;
+                //group.LearningDays = addGroup.GetWeekDays();
+                Connector.InsertGroup(group);
+                LoadGroups();
             }
         }
 
         [DllImport("kernel32")]
         static extern bool AllocConsole();
+
+        private void dataGridViewGroups_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Group group = new Group((sender as DataGridView).SelectedRows[0]);
+            //group.ID = Convert.ToInt32((sender as DataGridView).SelectedRows[0].Cells[0].Value);
+            //group.GroupName = (sender as DataGridView).SelectedRows[0].Cells[1].Value.ToString();
+            //group.StartDate = Convert.ToDateTime((sender as DataGridView).SelectedRows[0].Cells[2].Value);
+            //group.LearningTime = Convert.ToDateTime((sender as DataGridView).SelectedRows[0].Cells[3].Value).TimeOfDay;
+            //group.Direction = Connector.Directions[(sender as DataGridView).SelectedRows[0].Cells[4].Value.ToString()];
+            //group.LearningForm = Connector.LearningForms[(sender as DataGridView).SelectedRows[0].Cells[5].Value.ToString()];
+            //group.LearningDays = Convert.ToByte((sender as DataGridView).SelectedRows[0].Cells[6].Value);
+
+            addGroup.Init(group);
+
+            addGroup.ShowDialog();
+        }
     }
 }
