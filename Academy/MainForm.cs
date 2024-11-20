@@ -48,10 +48,24 @@ namespace Academy
                 "group_id, group_name,start_date,learning_time,direction_name,form_name,learning_days",
                 "Groups,Directions,LearningForms",
                 "direction=direction_id AND learning_form=form_id"
-                );
+            );
+            comboBoxStudentsGroup.DataSource = Connector.Select("*", "Groups");
+            comboBoxStudentsGroup.DisplayMember = "group_name";
+            comboBoxStudentsGroup.SelectedIndex = -1;
+            comboBoxStudentsGroup.ValueMember = "group_id";
+
+            comboBoxStudentsDirection.DataSource = Connector.Select("*", "Directions");
+            comboBoxStudentsDirection.DisplayMember = "direction_name";
+            comboBoxStudentsDirection.SelectedIndex = -1;
+            comboBoxStudentsDirection.ValueMember = "direction_id";
 
             //comboBoxGroupDirection.Items.AddRange(Connector.Select("direction_name", "Directions").Rows.Cast<String>().ToArray());
             comboBoxGroupDirection.Items.AddRange(Connector.SelectColumn("direction_name", "Directions").ToArray());
+            for (int i = 0; i < dataGridViewGroups.RowCount; i++)
+            {
+                dataGridViewGroups.Rows[i].Cells["learning_days"].Value = //dataGridViewGroups.Rows[i].Cells["learning_days"].Value;
+                    Week.ExtractDaysToString(Convert.ToByte(dataGridViewGroups.Rows[i].Cells["learning_days"].Value));
+            }
         }
         void SetStatusBarText(object sender, EventArgs e)
         {
