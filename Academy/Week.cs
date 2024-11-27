@@ -8,18 +8,18 @@ namespace Academy
 {
     static class Week
     {
-        static readonly string[] DayNames = new string[] {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
-        //public byte Days { get; set; }
+        static readonly string[] DayNames = new string[] { "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс" };
+        //public byte AssignedDays { get; set; }
         public static string ExtractDaysToString(byte days)
         {
             string result = "";
-            for(int i = 0; i < 7; i++)
+            for (int i = 0; i < 7; i++)
             {
                 if ((days & (1 << i)) != 0)
-                    result += DayNames[i] + ",";
+                    result += DayNames[i] + " ";
             }
-            //return = result.Remove(result.LastIndexOf(","));
-            return result; //.Remove(result.LastIndexOf(","));
+            //result = result.Remove(result.LastIndexOf(','));
+            return result;//.Remove(result.LastIndexOf(','));
         }
         public static byte CompressStringToByte(string assignedDays)
         {
